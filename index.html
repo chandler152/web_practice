@@ -8,7 +8,19 @@
       content="沈晉德 — 前端開發與 UI 設計個人作品集"
     />
     <title>沈晉德 | 個人作品集</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
     <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+      defer
+    ></script>
     <script src="script.js" defer></script>
   </head>
   <body>
@@ -96,6 +108,26 @@
               <span class="stat-label">可及性優先</span>
             </li>
           </ul>
+        </div>
+      </section>
+
+      <section id="map" class="section section-map">
+        <div class="container">
+          <header class="section-header section-header--center reveal">
+            <p class="section-label">Location</p>
+            <h2>所在位置</h2>
+            <p class="section-lead">
+              基於台北 101 一帶，歡迎來訪或線上聯繫。
+            </p>
+          </header>
+          <div class="map-wrapper reveal">
+            <div
+              id="map-container"
+              class="map-container"
+              role="application"
+              aria-label="台北 101 地圖"
+            ></div>
+          </div>
         </div>
       </section>
 
@@ -368,6 +400,11 @@
         </div>
       </div>
       <div class="container footer-bottom">
+        <p class="visitor-count" id="visitor-count" aria-live="polite">
+          本網站已瀏覽
+          <span class="visitor-count__value" id="visitor-count-value">—</span>
+          次
+        </p>
         <p class="copyright">
           <small
             >&copy; <span id="year"></span> 沈晉德. 保留所有權利。</small
