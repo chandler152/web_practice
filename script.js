@@ -149,6 +149,79 @@
     }
   }
 
+  function initVisitorCount() {
+    const valueEl = document.getElementById("visitor-count-value");
+    if (!valueEl) return;
+
+    const counterKey = "shenjinde-portfolio-visits";
+    const apiUrl =
+      "https://countapi.mileshilliard.com/api/v1/hit/" + counterKey;
+
+    fetch(apiUrl)
+      .then(function (res) {
+        if (!res.ok) throw new Error("Counter request failed");
+        return res.json();
+      })
+      .then(function (data) {
+        if (data && data.value != null) {
+          valueEl.textContent = Number(data.value).toLocaleString("zh-Hant");
+        }
+      })
+      .catch(function () {
+        valueEl.textContent = "—";
+      });
+  }
+
+  function initMap() {
+    const container = document.getElementById("map-container");
+    if (!container || typeof L === "undefined") return;
+
+    const taipei101 = [25.0339, 121.5645];
+    const map = L.map(container, {
+      scrollWheelZoom: false,
+    }).setView(taipei101, 14);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+
+    const markerIcon = L.divIcon({
+      className: "map-marker-icon",
+      html: '<span class="map-marker-pin" aria-hidden="true"></span>',
+      iconSize: [28, 36],
+      iconAnchor: [14, 36],
+      popupAnchor: [0, -36],
+    });
+
+    L.marker(taipei101, { icon: markerIcon })
+      .addTo(map)
+      .bindPopup("<strong>台北 101</strong>")
+      .openPopup();
+
+    function refreshMapSize() {
+      map.invalidateSize();
+    }
+
+    const mapSection = container.closest(".map-wrapper");
+    if (mapSection) {
+      const sizeObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              refreshMapSize();
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      sizeObserver.observe(mapSection);
+    }
+
+    window.addEventListener("resize", refreshMapSize);
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     initTheme();
     if (themeToggle) {
@@ -158,5 +231,7 @@
     initSmoothScroll();
     initReveal();
     initYear();
+    initVisitorCount();
+    initMap();
   });
 })();
